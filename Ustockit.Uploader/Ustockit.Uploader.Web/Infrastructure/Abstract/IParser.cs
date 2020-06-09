@@ -8,6 +8,6 @@ namespace Ustockit.Uploader.Web.Infrastructure.Abstract
 {
     public  interface IParser
     {
-        Task<IList<ProductModel>> Parse(string file);
+        Task<IList<ProductModel>> ParseAsync(string file);
     }
 }

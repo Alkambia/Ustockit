@@ -9,8 +9,10 @@ namespace Ustockit.Uploader.Web.Infrastructure.Concrete
 {
     public class JsonParser : IParser
     {
-        public Task<IList<ProductModel>> Parse(string file)
+        public Task<IList<ProductModel>> ParseAsync(string file)
         {
+            var test = new ProductModel();
+
             throw new NotImplementedException();
         }
     }

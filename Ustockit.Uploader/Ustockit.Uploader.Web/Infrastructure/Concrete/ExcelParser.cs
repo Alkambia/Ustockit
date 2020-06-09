@@ -9,7 +9,7 @@ namespace Ustockit.Uploader.Web.Infrastructure.Concrete
 {
     public class ExcelParser : IParser
     {
-        public async Task<IList<ProductModel>> Parse(string file)
+        public async Task<IList<ProductModel>> ParseAsync(string file)
         {
             throw new NotImplementedException();
         }
