@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ustockit.Uploader", "Ustockit.Uploader\Ustockit.Uploader.csproj", "{71CCC880-9046-4D41-9D36-54853C1DF173}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71CCC880-9046-4D41-9D36-54853C1DF173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71CCC880-9046-4D41-9D36-54853C1DF173}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71CCC880-9046-4D41-9D36-54853C1DF173}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71CCC880-9046-4D41-9D36-54853C1DF173}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2611276-C105-433C-8570-E045E322DCE2}
+	EndGlobalSection
+EndGlobal
