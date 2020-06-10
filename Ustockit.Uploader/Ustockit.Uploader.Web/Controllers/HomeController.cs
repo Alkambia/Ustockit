@@ -10,6 +10,7 @@ using Ustockit.Uploader.Web.Models;
 using Ustockit.Uploader.Web.Infrastructure.Ext;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http;
+using Ustockit.Uploader.Web.Infrastructure.Concrete;
 
 namespace Ustockit.Uploader.Web.Controllers
 {
@@ -49,14 +50,14 @@ namespace Ustockit.Uploader.Web.Controllers
             var exts = new List<string>() { ".csv", ".json", ".xlsx" };
             var files = Request.Form.Files;
             string message = "Successfully Uploaded";
-            int status = StatusCodes.Status200OK;
+            string status = "Success";
 
             foreach(var file in files)
             {
                 if(file.Length > 0)
                 {
                     string extension = System.IO.Path.GetExtension(file.FileName);
-                    if(file.ContentType.Equals("application/octet-stream") && exts.Contains(extension))
+                    if(exts.Contains(extension))
                     {
                         byte[] fileBytes;
                         using (var stream = file.OpenReadStream())
@@ -67,7 +68,7 @@ namespace Ustockit.Uploader.Web.Controllers
                     }
                     else
                     {
-                        status = StatusCodes.Status415UnsupportedMediaType;
+                        status = "Error";
                         message = "Unsupported file Extension";
                         break;
                     }
@@ -77,6 +78,16 @@ namespace Ustockit.Uploader.Web.Controllers
             await Task.FromResult(true);
             var msg = new { Status = status, Message = message };
             return Json(msg);
+        }
+
+        private async Task SaveFileAsync(string extension, IFormFile file, BinaryObject binaryObject)
+        {
+            switch(extension)
+            {
+                case ".csv": { await new CsvParser().ParseAsync(file.FileName, binaryObject); break; }
+                case ".json": { await new ExcelParser().ParseAsync(file.FileName, binaryObject); break; }
+                case ".xlsx": { await new JsonParser().ParseAsync(file.FileName, binaryObject); break; }
+            }
         }
     }
 }
