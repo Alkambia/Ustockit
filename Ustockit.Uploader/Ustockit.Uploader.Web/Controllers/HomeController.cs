@@ -11,10 +11,11 @@ using Ustockit.Uploader.Web.Infrastructure.Ext;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http;
 using Ustockit.Uploader.Web.Infrastructure.Concrete;
+using Ustockit.Uploader.Web.Infrastructure.Abstract;
 
 namespace Ustockit.Uploader.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Controller, IFile
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -37,7 +38,7 @@ namespace Ustockit.Uploader.Web.Controllers
             return View();
         }
 
-       [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
@@ -64,6 +65,7 @@ namespace Ustockit.Uploader.Web.Controllers
                         {
                             fileBytes = stream.ReadAllBytes();
                             var binaryObject = new BinaryObject(fileBytes);
+                            await SaveFileAsync(extension, file, binaryObject);
                         }
                     }
                     else
@@ -80,13 +82,14 @@ namespace Ustockit.Uploader.Web.Controllers
             return Json(msg);
         }
 
-        private async Task SaveFileAsync(string extension, IFormFile file, BinaryObject binaryObject)
+        //todo: for demo purpose, can be change and added to class for dependency injection 
+        public async Task SaveFileAsync(string extension, IFormFile file, BinaryObject binaryObject)
         {
-            switch(extension)
+            switch (extension)
             {
                 case ".csv": { await new CsvParser().ParseAsync(file.FileName, binaryObject); break; }
-                case ".json": { await new ExcelParser().ParseAsync(file.FileName, binaryObject); break; }
-                case ".xlsx": { await new JsonParser().ParseAsync(file.FileName, binaryObject); break; }
+                case ".json": { await new JsonParser().ParseAsync(file.FileName, binaryObject); break; }
+                case ".xlsx": { await new ExcelParser().ParseAsync(file.FileName, binaryObject); break; }
             }
         }
     }
