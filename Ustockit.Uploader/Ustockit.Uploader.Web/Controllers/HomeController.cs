@@ -12,16 +12,19 @@ using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http;
 using Ustockit.Uploader.Web.Infrastructure.Concrete;
 using Ustockit.Uploader.Web.Infrastructure.Abstract;
+using Ustockit.Uploader.Shared.Util;
 
 namespace Ustockit.Uploader.Web.Controllers
 {
     public class HomeController : Controller, IFile
     {
         private readonly ILogger<HomeController> _logger;
+        IStoreFile _storeFile;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IStoreFile storeFile)
         {
             _logger = logger;
+            _storeFile = storeFile;
         }
 
         public IActionResult Index()
@@ -48,49 +51,17 @@ namespace Ustockit.Uploader.Web.Controllers
         public async Task<IActionResult> Upload()
         {
             //todo: make constant string enum
-            var exts = new List<string>() { ".csv", ".json", ".xlsx" };
             var files = Request.Form.Files;
             string message = "Successfully Uploaded";
             string status = "Success";
 
-            foreach(var file in files)
-            {
-                if(file.Length > 0)
-                {
-                    string extension = System.IO.Path.GetExtension(file.FileName);
-                    if(exts.Contains(extension))
-                    {
-                        byte[] fileBytes;
-                        using (var stream = file.OpenReadStream())
-                        {
-                            fileBytes = stream.ReadAllBytes();
-                            var binaryObject = new BinaryObject(fileBytes);
-                            await SaveFileAsync(extension, file, binaryObject);
-                        }
-                    }
-                    else
-                    {
-                        status = "Error";
-                        message = "Unsupported file Extension";
-                        break;
-                    }
-                }
-            }
+            IList<IFormFile> filesx = files.ToList();
+            await _storeFile.SaveToStorage(filesx, Path.GetFullPath(string.Format("{0}\\{1}",Directory.GetCurrentDirectory(),"fileStorage")));
+
 
             await Task.FromResult(true);
             var msg = new { Status = status, Message = message };
             return Json(msg);
-        }
-
-        //todo: for demo purpose, can be change and added to class for dependency injection 
-        public async Task SaveFileAsync(string extension, IFormFile file, BinaryObject binaryObject)
-        {
-            switch (extension)
-            {
-                case ".csv": { await new CsvParser().ParseAsync(file.FileName, binaryObject); break; }
-                case ".json": { await new JsonParser().ParseAsync(file.FileName, binaryObject); break; }
-                case ".xlsx": { await new ExcelParser().ParseAsync(file.FileName, binaryObject); break; }
-            }
         }
     }
 }

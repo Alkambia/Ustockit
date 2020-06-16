@@ -9,7 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="fileStorage\" />
     <Folder Include="wwwroot\lib\jquery-toast\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ustockit.Uploader.Shared\Ustockit.Uploader.Shared.csproj" />
   </ItemGroup>
 
 </Project>
