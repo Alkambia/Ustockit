@@ -20,15 +20,18 @@ namespace Ustockit.Uploader.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         IStoreFile _storeFile;
+        private ExcelParser _parser;
 
-        public HomeController(ILogger<HomeController> logger, IStoreFile storeFile)
+        public HomeController(ILogger<HomeController> logger, IStoreFile storeFile, ExcelParser parser)
         {
             _logger = logger;
             _storeFile = storeFile;
+            _parser = parser;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+
             return View();
         }
 

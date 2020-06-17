@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ustockit.Uploader.JobProcessor.Jobs;
 using Ustockit.Uploader.Shared.Util;
+using Ustockit.Uploader.Web.Infrastructure.Concrete;
 using Ustockit.Uploader.Web.Infrastructure.Ext;
 
 namespace Ustockit.Uploader.Web
@@ -69,7 +70,8 @@ namespace Ustockit.Uploader.Web
             services.AddTransient<IProcessFileStored, ProcessFileStored>();
             services.AddTransient<IProcessBatchFile, ProcessBatchFile>();
             services.AddTransient<IProcessProduct, ProcessProduct>();
-            
+
+            services.AddTransient<ExcelParser>();
 
             services.AddControllersWithViews();
         }

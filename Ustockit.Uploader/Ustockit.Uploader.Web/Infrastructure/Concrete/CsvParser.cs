@@ -9,7 +9,7 @@ namespace Ustockit.Uploader.Web.Infrastructure.Concrete
 {
     public class CsvParser : IParser
     {
-        public async Task<IList<ProductModel>> ParseAsync(string file, BinaryObject binaryObject)
+        public async Task<IList<ProductModel>> ParseAsync(string file, string manufacturer)
         {
             throw new NotImplementedException();
         }
