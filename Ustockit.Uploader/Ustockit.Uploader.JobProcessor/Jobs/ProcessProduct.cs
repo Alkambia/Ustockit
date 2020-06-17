@@ -11,7 +11,9 @@ namespace Ustockit.Uploader.JobProcessor.Jobs
         public async Task Execute<T>(T args)
         {
             var product = args as JObject;
+            //Apply validation
             //process here
+            //or send to API
         }
     }
 }

@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ustockit.Uploader.Shared.Models;
@@ -16,6 +17,7 @@ namespace Ustockit.Uploader.JobProcessor.Jobs
         {
             JObject jbatch = new JObject();
 
+            #region Parser code here
             var storedfile = args as StoredFile;
             //exceute, from storage to batch queue
             switch (storedfile.Extension)
@@ -110,10 +112,25 @@ namespace Ustockit.Uploader.JobProcessor.Jobs
                         break;
                     }
             }
+            #endregion
 
+
+            var skip = 0;
+            //shoud add this one on config
+            var take = 10000;
+            var list = (jbatch["BatchRows"] as JArray);
+
+            while (skip <= list.Count())
+            {
+                var jbatchArg = new JObject();
+                var takenList = list.Skip(skip).Take(take);
+                var batchList = takenList.ToList();
+                BackgroundJob.Enqueue<IProcessBatchFile>(e => e.Execute(batchList));
+                skip += (skip + take);
+            }
             //enqueue
             //should apply batch concept here
-            BackgroundJob.Enqueue<IProcessBatchFile>(e => e.Execute(jbatch));
+            
         }
     }
 }

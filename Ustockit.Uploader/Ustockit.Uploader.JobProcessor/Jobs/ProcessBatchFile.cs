@@ -11,16 +11,10 @@ namespace Ustockit.Uploader.JobProcessor.Jobs
     {
         public async Task Execute<T>(T args)
         {
-            JObject jbatch = args as JObject;
-            if(jbatch.ContainsKey("BatchRows"))
+            var rows = args as List<JToken>;
+            foreach (var row in rows)
             {
-                var rows = jbatch["BatchRows"] as JArray;
-                foreach(var row in rows)
-                {
-                    //process product
-                    //enqueue
-                    BackgroundJob.Enqueue<IProcessProduct>(e => e.Execute(row));
-                }
+                BackgroundJob.Enqueue<IProcessProduct>(e => e.Execute(row));
             }
         }
     }
