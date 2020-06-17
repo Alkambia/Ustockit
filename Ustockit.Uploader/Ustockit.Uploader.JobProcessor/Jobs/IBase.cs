@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Ustockit.Uploader.Shared.Models;
 
 namespace Ustockit.Uploader.JobProcessor.Jobs
 {
-    public interface IProcessFileStored: IBase
+    public interface IBase
     {
-        //Task Execute(StoredFile storedfile);
+        Task Execute<T>(T args);
     }
 }

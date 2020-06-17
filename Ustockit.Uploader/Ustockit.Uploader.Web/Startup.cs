@@ -67,6 +67,9 @@ namespace Ustockit.Uploader.Web
 
             services.AddTransient<IStoreFile, StoreFile>();
             services.AddTransient<IProcessFileStored, ProcessFileStored>();
+            services.AddTransient<IProcessBatchFile, ProcessBatchFile>();
+            services.AddTransient<IProcessProduct, ProcessProduct>();
+            
 
             services.AddControllersWithViews();
         }
