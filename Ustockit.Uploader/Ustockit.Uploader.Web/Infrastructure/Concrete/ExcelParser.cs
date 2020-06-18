@@ -33,7 +33,9 @@ namespace Ustockit.Uploader.Web.Infrastructure.Concrete
                 }
                 
 
-                var config = await Task.Run(() => JsonFileUtil.GetFileThenParse<ProductUploadConfig>(configPath));
+                var parseConfig = await Task.Run(() => JsonFileUtil.GetFileThenParse<ProductUploadConfig>(configPath));
+                var config = parseConfig.ExcelConfig;
+
 
                 FileInfo file = new FileInfo(filePath);
 

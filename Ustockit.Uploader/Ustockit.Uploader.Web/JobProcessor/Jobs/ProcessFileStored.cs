@@ -17,9 +17,11 @@ namespace Ustockit.Uploader.JobProcessor.Jobs
     {
         private IConfigurationRoot _appConfiguration;
         private ExcelParser _excelParser;
-        public ProcessFileStored(ExcelParser excelParser, IConfigurationRoot appConfiguration)
+        private XmlParser _xmlParser;
+        public ProcessFileStored(ExcelParser excelParser, XmlParser xmlParser, IConfigurationRoot appConfiguration)
         {
             _excelParser = excelParser;
+            _xmlParser = xmlParser;
             _appConfiguration = appConfiguration;
         }
 
@@ -50,6 +52,7 @@ namespace Ustockit.Uploader.JobProcessor.Jobs
 
                 case ".xml":
                     {
+                        products = (await _xmlParser.ParseAsync(filePath, "seco")).ToList();
                         break;
                     }
             }
