@@ -20,9 +20,9 @@ namespace Ustockit.Uploader.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         IStoreFile _storeFile;
-        private ExcelParser _parser;
+        private CsvParser _parser;
 
-        public HomeController(ILogger<HomeController> logger, IStoreFile storeFile, ExcelParser parser)
+        public HomeController(ILogger<HomeController> logger, IStoreFile storeFile, CsvParser parser)
         {
             _logger = logger;
             _storeFile = storeFile;
@@ -31,6 +31,7 @@ namespace Ustockit.Uploader.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
+            await _parser.ParseAsync(@"C:\Users\Jhomel\Downloads\seco catalog\Book1.csv", "seco");
 
             return View();
         }

@@ -77,6 +77,7 @@ namespace Ustockit.Uploader.Web
             });
 
             services.AddTransient<ExcelParser>();
+            services.AddTransient<CsvParser>();
 
             services.AddControllersWithViews();
         }

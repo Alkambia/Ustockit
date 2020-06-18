@@ -1,12 +1,22 @@
 {
   "xml": {
     "HeadTag": "Product",
-    "Property": ["ProductNo","Description","Price"]
+    "Property": [ "ProductNo", "Description", "Price" ]
   },
-  "excel": {
+  //EPPLus Excel parsers
+  //Indexes starts at 1
+  "ExcelConfig": {
     "StartingRow": 2,
     "ProductNoCol": 1,
     "DescriptionCol": 2,
     "PriceCol": 17
+  },
+  //TinyCsvparser
+  //Index Start 0
+  "CsvConfig": {
+    "StartingRow": 1,
+    "ProductNoCol": 0,
+    "DescriptionCol": 1,
+    "PriceCol": 16
   }
 }
