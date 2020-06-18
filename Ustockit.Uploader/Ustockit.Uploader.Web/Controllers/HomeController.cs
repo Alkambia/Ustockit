@@ -31,8 +31,6 @@ namespace Ustockit.Uploader.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            await _parser.ParseAsync(@"C:\Users\Jhomel\Downloads\seco catalog\Book1.csv", "seco");
-
             return View();
         }
 
