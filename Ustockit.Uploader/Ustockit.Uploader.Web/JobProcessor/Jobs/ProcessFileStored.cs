@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,10 +19,12 @@ namespace Ustockit.Uploader.JobProcessor.Jobs
         private IConfigurationRoot _appConfiguration;
         private ExcelParser _excelParser;
         private XmlParser _xmlParser;
-        public ProcessFileStored(ExcelParser excelParser, XmlParser xmlParser, IConfigurationRoot appConfiguration)
+        private CsvParser _csvParser;
+        public ProcessFileStored(ExcelParser excelParser, XmlParser xmlParser, CsvParser csvParser, IConfigurationRoot appConfiguration)
         {
             _excelParser = excelParser;
             _xmlParser = xmlParser;
+            _csvParser = csvParser;
             _appConfiguration = appConfiguration;
         }
 
@@ -37,6 +40,7 @@ namespace Ustockit.Uploader.JobProcessor.Jobs
             {
                 case ".csv":
                     {
+                        products = (await _csvParser.ParseAsync(filePath, "seco")).ToList();
                         break;
                     }
                 case ".json":
