@@ -49,7 +49,7 @@ namespace Ustockit.Uploader.Web.Infrastructure.Concrete
                     int rowNumber = row.RowIndex + 1;
 
                     if (!row.IsValid)
-                        throw new Exception($"Failed parsing the csv. There is an error parsing the value at row ({rowNumber}). Additional Info: {row.Error.Value}");
+                        throw new Exception($"There is an error parsing the value at row ({rowNumber}). Additional Info: {row.Error.Value}");
 
                     products.Add(row.Result);
                 }
