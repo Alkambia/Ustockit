@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using Microsoft.Extensions.Configuration;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,13 +15,24 @@ namespace Ustockit.Uploader.Web.Infrastructure.Concrete
 {
     public class ExcelParser : IParser
     {
+        private IConfigurationRoot _appConfiguration;
+        public ExcelParser(IConfigurationRoot appConfiguration)
+        {
+            _appConfiguration = appConfiguration;
+        }
         public async Task<IList<ProductModel>> ParseAsync(string filePath, string manufacturer)
         {
             try
             {
                 List<ProductModel> products = new List<ProductModel>();
-
                 string configPath = $"Configs\\Manufacturer\\{manufacturer}.config.json";
+                var path = _appConfiguration["App:ManufacturerConfigPath"];
+                if(!string.IsNullOrEmpty(path))
+                {
+                    configPath = string.Format(path, manufacturer);
+                }
+                
+
                 var config = await Task.Run(() => JsonFileUtil.GetFileThenParse<ProductUploadConfig>(configPath));
 
                 FileInfo file = new FileInfo(filePath);

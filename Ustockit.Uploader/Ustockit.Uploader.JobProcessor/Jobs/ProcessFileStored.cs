@@ -16,9 +16,9 @@ namespace Ustockit.Uploader.JobProcessor.Jobs
         public async Task Execute<T>(T args)
         {
             JObject jbatch = new JObject();
+            var storedfile = args as StoredFile;
 
             #region Parser code here
-            var storedfile = args as StoredFile;
             //exceute, from storage to batch queue
             switch (storedfile.Extension)
             {
@@ -130,7 +130,7 @@ namespace Ustockit.Uploader.JobProcessor.Jobs
             }
             //enqueue
             //should apply batch concept here
-            
+
         }
     }
 }

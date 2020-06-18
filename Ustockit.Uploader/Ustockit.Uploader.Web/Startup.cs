@@ -20,9 +20,11 @@ namespace Ustockit.Uploader.Web
     public class Startup
     {
         private readonly IConfigurationRoot _appConfiguration;
+        private readonly IWebHostEnvironment _env;
         public Startup(IWebHostEnvironment env)
         {
             _appConfiguration = env.GetAppConfiguration();
+            _env = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -30,12 +32,12 @@ namespace Ustockit.Uploader.Web
         {
             
 
-            if (bool.Parse(_appConfiguration["Abp:Hangfire:IsServerEnabled"]))
+            if (bool.Parse(_appConfiguration["App:Hangfire:IsServerEnabled"]))
             {
                 var connectionStringName = "Default";
                 try
                 {
-                    connectionStringName = _appConfiguration["Abp:Hangfire:ConnectionString"];
+                    connectionStringName = _appConfiguration["App:Hangfire:ConnectionString"];
                     if (String.IsNullOrEmpty(connectionStringName))
                     {
                         connectionStringName = "Default";
@@ -70,6 +72,9 @@ namespace Ustockit.Uploader.Web
             services.AddTransient<IProcessFileStored, ProcessFileStored>();
             services.AddTransient<IProcessBatchFile, ProcessBatchFile>();
             services.AddTransient<IProcessProduct, ProcessProduct>();
+            services.AddTransient(o => {
+                return _env.GetAppConfiguration();
+            });
 
             services.AddTransient<ExcelParser>();
 
@@ -96,12 +101,12 @@ namespace Ustockit.Uploader.Web
 
             app.UseAuthorization();
 
-            if (bool.Parse(_appConfiguration["Abp:Hangfire:IsDashboardEnabled"]))
+            if (bool.Parse(_appConfiguration["App:Hangfire:IsDashboardEnabled"]))
             {
                 //todo: Authorization Filter will be added later
                 app.UseHangfireDashboard();
             }
-            if (bool.Parse(_appConfiguration["Abp:Hangfire:IsServerEnabled"]))
+            if (bool.Parse(_appConfiguration["App:Hangfire:IsServerEnabled"]))
             {
                 //todo: Implement Queue priority when more than one job
                 //todo: Domain Service can also be implemented if highest priority wont work.
