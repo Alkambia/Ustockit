@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Hangfire;
-using Hangfire.SqlServer;
+using Hangfire.MySql.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -54,15 +55,27 @@ namespace Ustockit.Uploader.Web
                     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
-                    .UseSqlServerStorage(_appConfiguration.GetConnectionString(connectionStringName), new SqlServerStorageOptions
-                    {
-                        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                        QueuePollInterval = TimeSpan.Zero,
-                        UseRecommendedIsolationLevel = true,
-                        UsePageLocksOnDequeue = true,
-                        DisableGlobalLocks = true
-                    }));
+                    .UseStorage(
+                    new MySqlStorage(_appConfiguration.GetConnectionString(connectionStringName), new MySqlStorageOptions {
+                        TransactionIsolationLevel = IsolationLevel.ReadCommitted,
+                        QueuePollInterval = TimeSpan.FromSeconds(15),
+                        JobExpirationCheckInterval = TimeSpan.FromHours(1),
+                        CountersAggregateInterval = TimeSpan.FromMinutes(5),
+                        PrepareSchemaIfNecessary = true,
+                        DashboardJobListLimit = 50000,
+                        TransactionTimeout = TimeSpan.FromMinutes(1),
+                        TablePrefix = "Hangfire"
+                    })
+                    //.UseSqlServerStorage(_appConfiguration.GetConnectionString(connectionStringName), new SqlServerStorageOptions
+                    //{
+                    //    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    //    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    //    QueuePollInterval = TimeSpan.Zero,
+                    //    UseRecommendedIsolationLevel = true,
+                    //    UsePageLocksOnDequeue = true,
+                    //    DisableGlobalLocks = true
+                    //}
+                    ));
 
                 // Add the processing server as IHostedService
                 services.AddHangfireServer();
