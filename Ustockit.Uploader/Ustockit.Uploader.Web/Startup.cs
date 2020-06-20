@@ -11,10 +11,12 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MySql.Data.MySqlClient;
 using Ustockit.Uploader.JobProcessor.Jobs;
 using Ustockit.Uploader.Shared.Util;
 using Ustockit.Uploader.Web.Infrastructure.Concrete;
 using Ustockit.Uploader.Web.Infrastructure.Ext;
+using Ustockit.Uploader.Web.Repositories;
 
 namespace Ustockit.Uploader.Web
 {
@@ -65,22 +67,18 @@ namespace Ustockit.Uploader.Web
                         DashboardJobListLimit = 50000,
                         TransactionTimeout = TimeSpan.FromMinutes(1),
                         TablePrefix = "Hangfire"
-                    })
-                    //.UseSqlServerStorage(_appConfiguration.GetConnectionString(connectionStringName), new SqlServerStorageOptions
-                    //{
-                    //    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                    //    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                    //    QueuePollInterval = TimeSpan.Zero,
-                    //    UseRecommendedIsolationLevel = true,
-                    //    UsePageLocksOnDequeue = true,
-                    //    DisableGlobalLocks = true
-                    //}
-                    ));
+                    })));
 
                 // Add the processing server as IHostedService
                 services.AddHangfireServer();
             }
 
+
+            //IDbConnection
+            services.AddTransient<IDbConnection>(o => {
+                return new MySqlConnection(_appConfiguration.GetConnectionString("Default"));
+            });
+            services.AddTransient<IRepositoryBase, RepositoryBase>();
             services.AddTransient<IStoreFile, StoreFile>();
             services.AddTransient<IProcessFileStored, ProcessFileStored>();
             services.AddTransient<IProcessBatchFile, ProcessBatchFile>();
